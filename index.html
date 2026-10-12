@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Mihrab Dz - محراب | GPS + أذان + أدعية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+*{font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
+.amiri{font-family:'Amiri',serif}
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.7)}70%{box-shadow:0 0 0 15px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+.range{accent-color:#fbbf24}
+</style>
+</head>
+<body class="bg-[#020a07] text-white min-h-screen pb-24 select-none">
+<!-- AD TOP -->
+<div class="bg-[#0a1f16] border-b border-dashed border-yellow-500/20 text-center py-2 text-[10px] text-yellow-500/40">ADMOB_TOP - Banner 320x50 - ca-app-pub-XXXX/XXXX</div>
+
+<div class="max-w-md mx-auto px-4 py-4">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-4">
+    <div class="flex items-center gap-2.5">
+      <div class="w-11 h-11 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-xl flex items-center justify-center font-black text-black text-xl shadow-lg">م</div>
+      <div><h1 class="font-black text-[16px]">Mihrab Dz - محراب</h1><p class="text-[9px] text-emerald-300/60">GPS + أذان + منبه + أدعية</p></div>
+    </div>
+    <div class="bg-[#0f2218] px-3 py-1.5 rounded-xl border border-white/5 text-left">
+      <div id="clock" class="text-sm font-bold font-mono">--:--</div>
+      <div id="hijri" class="text-[9px] text-white/40">--</div>
+    </div>
+  </div>
+
+  <!-- GPS BUTTON -->
+  <button id="gpsBtn" class="pulse w-full bg-gradient-to-r from-emerald-600 to-emerald-500 py-4 rounded-2xl font-black text-[14px] flex items-center justify-center gap-2 shadow-xl mb-3">📍 تحديد موقعي تلقائيا - GPS دقيق</button>
+  <div id="gpsInfo" class="hidden bg-emerald-950/50 border border-emerald-800/40 rounded-2xl p-3 mb-3 text-xs">
+    <div class="flex justify-between"><span id="cityName" class="font-bold text-emerald-300">--</span><span id="acc" class="text-[10px] bg-emerald-900/50 px-2 py-0.5 rounded-full">--</span></div>
+    <div id="coords" class="text-[10px] text-white/30 font-mono mt-1">--</div>
+  </div>
+
+  <select id="wilayaSelect" class="w-full bg-[#0f2218] border border-white/10 rounded-xl py-3 px-3 text-sm mb-3">
+    <option>📍 أو اختر ولايتك يدويا</option>
+  </select>
+
+  <!-- NEXT PRAYER -->
+  <div id="nextBox" class="bg-gradient-to-br from-yellow-400 to-amber-500 text-black rounded-[20px] p-4 mb-3 shadow-xl">
+    <div class="flex justify-between items-center">
+      <div><p class="text-[11px] opacity-60 font-bold">القادمة</p><p id="nextName" class="font-black text-xl">--</p><p id="nextTime" class="text-xs font-bold opacity-70">--:--</p></div>
+      <div class="text-left"><p id="countdown" class="font-mono font-black text-2xl">00:00:00</p><button id="testAdhanBtn" class="mt-1 bg-black/10 px-2 py-1 rounded-full text-[10px] font-bold">🔊 جرب الأذان</button></div>
+    </div>
+  </div>
+
+  <!-- PRAYER TIMES -->
+  <div id="prayerGrid" class="grid grid-cols-2 gap-2 mb-3"></div>
+
+  <!-- ADHAN SOUNDS CONTROL -->
+  <div class="bg-[#0f2218] rounded-[20px] p-4 mb-3 border border-white/5">
+    <h3 class="font-black text-sm mb-3 flex items-center gap-2">🔊 صوت الأذان والمنبه <span class="text-[10px] bg-yellow-400 text-black px-2 py-0.5 rounded-full">جديد</span></h3>
+    
+    <div class="space-y-2 mb-3">
+      <label class="text-[11px] opacity-60">اختر صوت المؤذن:</label>
+      <select id="adhanVoice" class="w-full bg-black/30 border border-white/10 rounded-xl py-2.5 px-3 text-sm">
+        <option value="0">🕋 مكة المكرمة - الشيخ علي ملا</option>
+        <option value="1">🕌 المدينة المنورة</option>
+        <option value="2">🇩🇿 الجزائر - عبد الرحمن</option>
+        <option value="3">🇪🇬 مصر - النقشبندي</option>
+        <option value="4">🔔 تنبيه خفيف (بدون أذان كامل)</option>
+      </select>
+    </div>
+
+    <div class="flex items-center justify-between bg-black/20 rounded-xl p-3 mb-3">
+      <div><p class="text-sm font-bold">تفعيل الأذان التلقائي</p><p class="text-[10px] opacity-50">يرن عند دخول وقت الصلاة</p></div>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="adhanToggle" class="sr-only peer">
+        <div class="w-12 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+      </label>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2 mb-3">
+      <div class="bg-black/20 rounded-xl p-2.5"><p class="text-[10px] opacity-60">مستوى الصوت</p><input id="volume" type="range" min="0" max="100" value="80" class="range w-full mt-1"><p id="volText" class="text-[11px] font-bold mt-1">80%</p></div>
+      <div class="bg-black/20 rounded-xl p-2.5"><p class="text-[10px] opacity-60">منبه قبل الأذان</p><select id="beforeMin" class="w-full bg-transparent text-xs font-bold mt-1"><option value="0">في الوقت</option><option value="5">قبل 5 دق</option><option value="10">قبل 10 دق</option></select></div>
+    </div>
+
+    <audio id="adhanAudio" preload="auto"></audio>
+    <div class="flex gap-2">
+      <button id="playBtn" class="flex-1 bg-yellow-400 text-black font-black py-2.5 rounded-xl text-sm">▶️ تشغيل</button>
+      <button id="stopBtn" class="flex-1 bg-white/10 py-2.5 rounded-xl text-sm">⏹️ إيقاف</button>
+      <button id="duaAfterBtn" class="bg-emerald-800/50 px-4 rounded-xl text-xs font-bold border border-emerald-700/30">🤲 دعاء بعد الأذان</button>
+    </div>
+    <p class="text-[9px] text-white/30 mt-2 leading-relaxed">💡 ملاحظة: الأذان الحقيقي يحتاج موافقة المتصفح على الصوت + تفعيل الإشعارات. في Play Store سيعمل حتى والهاتف مقفول.</p>
+  </div>
+
+  <!-- AD MIDDLE -->
+  <div class="bg-[#0a1f16] border border-dashed border-white/10 rounded-2xl py-6 text-center text-[11px] text-white/20 mb-3">AD: Interstitial - يظهر كل 3 فتحات</div>
+
+  <!-- QIBLA -->
+  <div class="bg-[#0f2218] rounded-[22px] p-4 mb-3 border border-white/5">
+    <h3 class="font-black text-sm mb-3">🕋 اتجاه القبلة <span id="qiblaDeg" class="float-right text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded-full text-xs">--°</span></h3>
+    <div class="relative w-48 h-48 mx-auto bg-[#020a07] rounded-full border-[5px] border-[#1a3d2b] flex items-center justify-center">
+      <div id="compassRose" class="absolute w-full h-full" style="transition:transform 0.3s"><div id="qiblaNeedle" class="absolute top-1/2 left-1/2 w-1 h-20 bg-yellow-400 origin-bottom -translate-x-1/2 -translate-y-full rounded-full" style="transform:translate(-50%,-100%) rotate(0deg)"></div><div class="absolute top-1/2 left-1/2 w-4 h-4 bg-yellow-400 rounded-full -translate-x-1/2 -translate-y-1/2"></div></div><div class="z-10 text-xl">🕋</div>
+    </div>
+    <button id="compassBtn" class="w-full mt-3 bg-white/5 py-2.5 rounded-xl text-xs font-bold">🧭 تفعيل البوصلة الحقيقية</button>
+  </div>
+
+  <!-- TASBIH -->
+  <div class="bg-[#0f2218] rounded-[22px] p-4 mb-3 border border-white/5 text-center">
+    <h3 class="font-black text-sm mb-3">📿 السبحة</h3>
+    <div class="flex justify-center gap-2 mb-3">
+      <button data-z="سبحان الله" class="zBtn bg-emerald-900/40 border border-emerald-700/40 px-3 py-1 rounded-full text-[11px] font-bold">سبحان الله</button>
+      <button data-z="الحمد لله" class="zBtn bg-white/5 px-3 py-1 rounded-full text-[11px]">الحمد لله</button>
+      <button data-z="الله أكبر" class="zBtn bg-white/5 px-3 py-1 rounded-full text-[11px]">الله أكبر</button>
+    </div>
+    <div id="tCount" class="text-6xl font-black text-yellow-400 my-2">0</div>
+    <p id="tText" class="amiri text-[16px] text-emerald-200/70">سبحان الله</p>
+    <div class="flex gap-2 mt-4"><button id="tapBtn" class="flex-1 bg-yellow-400 text-black font-black py-4 rounded-2xl text-lg active:scale-95 transition">اضغط</button><button id="resetBtn" class="bg-white/10 px-5 rounded-2xl">↺</button></div>
+  </div>
+
+  <!-- ATHKAR + DUA -->
+  <div class="bg-[#0f2218] rounded-[22px] p-4 mb-3 border border-white/5">
+    <h3 class="font-black text-sm mb-3">🤲 الأذكار والأدعية</h3>
+    <div class="flex gap-2 mb-3">
+      <button data-ath="sabah" class="athTab bg-yellow-400 text-black px-3 py-1.5 rounded-full text-xs font-black">الصباح</button>
+      <button data-ath="masaa" class="athTab bg-white/10 px-3 py-1.5 rounded-full text-xs">المساء</button>
+      <button data-ath="dua" class="athTab bg-white/10 px-3 py-1.5 rounded-full text-xs">أدعية</button>
+    </div>
+    <div id="athkarBox" class="space-y-2 max-h-60 overflow-y-auto"></div>
+    <button id="playDuaBtn" class="w-full mt-3 bg-emerald-900/30 border border-emerald-700/30 py-2.5 rounded-xl text-xs font-bold">🔊 تشغيل دعاء بصوت (تجريبي)</button>
+  </div>
+
+  <div class="text-center text-[10px] text-white/15 pb-8">Mihrab Dz v2.0 - GPS + أذان + أدعية - صنع في الجزائر 🇩🇿</div>
+</div>
+
+<!-- Dua Modal -->
+<div id="duaModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+  <div class="bg-[#0f2218] rounded-[20px] p-5 max-w-sm w-full border border-white/10">
+    <h3 class="font-black text-sm mb-3">🤲 دعاء بعد الأذان</h3>
+    <p class="amiri text-[15px] leading-relaxed text-emerald-100">اللهم رب هذه الدعوة التامة، والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته، حلت له شفاعتي يوم القيامة.</p>
+    <p class="text-[11px] text-white/40 mt-3">يقال بعد الأذان مباشرة - أجره عظيم</p>
+    <button onclick="document.getElementById('duaModal').classList.add('hidden')" class="w-full mt-4 bg-yellow-400 text-black font-black py-2.5 rounded-xl">حفظك الله</button>
+  </div>
+</div>
+
+<div class="fixed bottom-0 left-0 right-0 bg-[#0a1f16] border-t border-yellow-500/15 py-2 text-center text-[10px] text-yellow-500/30">AD STICKY BOTTOM - 320x50</div>
+
+<script>
+const wilayas=[{n:"الجزائر",lat:36.7525,lng:3.042},{n:"وهران",lat:35.6969,lng:-0.6331},{n:"قسنطينة",lat:36.365,lng:6.6149},{n:"عنابة",lat:36.9,lng:7.7667},{n:"البليدة",lat:36.42,lng:2.8277},{n:"باتنة",lat:35.555,lng:6.1743},{n:"سطيف",lat:36.19,lng:5.41},{n:"بجاية",lat:36.7525,lng:5.063},{n:"تلمسان",lat:34.883,lng:-1.3167},{n:"ورقلة",lat:31.95,lng:5.3167}];
+const adhanSources=[
+"https://ia801904.us.archive.org/13/items/AdhanMakkah/Adhan%20Makkah.mp3",
+"https://ia800904.us.archive.org/13/items/AdhanMadinah/Adhan%20Madinah.mp3",
+"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+];
+const sel=document.getElementById('wilayaSelect'); wilayas.forEach(w=>{let o=document.createElement('option');o.textContent=w.n; o.dataset.lat=w.lat; o.dataset.lng=w.lng; sel.appendChild(o);});
+let curLat=36.7525,curLng=3.042,prayers={},tasbih=0,adhanEnabled=false;
+const audio=document.getElementById('adhanAudio');
+const ATHKAR={
+ sabah:["أصبحنا وأصبح الملك لله","اللهم إني أصبحت أشهدك وأشهد حملة عرشك","حسبي الله لا إله إلا هو عليه توكلت 7 مرات","سبحان الله وبحمده 100 مرة"],
+ masaa:["أمسينا وأمسى الملك لله","اللهم إني أمسيت أشهدك","أعوذ بكلمات الله التامات من شر ما خلق 3 مرات","اللهم عافني في بدني"],
+ dua:["اللهم رب هذه الدعوة التامة - دعاء بعد الأذان","دعاء الاستفتاح: سبحانك اللهم وبحمدك","سيد الاستغفار: اللهم أنت ربي لا إله إلا أنت","دعاء دخول المسجد: اللهم افتح لي أبواب رحمتك"]
+};
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('ar-DZ',{hour:'2-digit',minute:'2-digit'});},1000);
+try{document.getElementById('hijri').textContent=new Intl.DateTimeFormat('ar-DZ-u-ca-islamic',{day:'numeric',month:'long'}).format(new Date());}catch{}
+
+function qibla(lat,lng){const kaLa=21.4225*Math.PI/180,kaLo=39.8262*Math.PI/180,la=lat*Math.PI/180,lo=lng*Math.PI/180,d=kaLo-lo,y=Math.sin(d),x=Math.cos(la)*Math.tan(kaLa)-Math.sin(la)*Math.cos(d);return(Math.atan2(y,x)*180/Math.PI+360)%360;}
+function updQibla(){let b=qibla(curLat,curLng);document.getElementById('qiblaDeg').textContent=Math.round(b)+'°';document.getElementById('qiblaNeedle').style.transform=`translate(-50%,-100%) rotate(${b}deg)`;}
+
+async function getGPS(){
+ let btn=document.getElementById('gpsBtn');btn.textContent='⏳ جاري التحديد...';btn.disabled=true;
+ navigator.geolocation.getCurrentPosition(async p=>{
+  curLat=p.coords.latitude;curLng=p.coords.longitude;
+  document.getElementById('gpsInfo').classList.remove('hidden');
+  document.getElementById('cityName').textContent='موقعك الحالي';document.getElementById('acc').textContent='دقة ±'+Math.round(p.coords.accuracy)+'م';document.getElementById('coords').textContent=curLat.toFixed(5)+', '+curLng.toFixed(5);
+  localStorage.setItem('mihrab_lat',curLat);localStorage.setItem('mihrab_lng',curLng);
+  btn.textContent='✅ تم - '+curLat.toFixed(3);setTimeout(()=>{btn.textContent='📍 تحديد موقعي تلقائيا - GPS دقيق';btn.disabled=false;},2000);
+  fetchP(curLat,curLng);updQibla();
+ },e=>{alert('فعّل GPS');btn.textContent='📍 تحديد موقعي تلقائيا';btn.disabled=false;},{enableHighAccuracy:true,timeout:15000});
+}
+document.getElementById('gpsBtn').onclick=getGPS;
+window.addEventListener('load',()=>{let la=localStorage.getItem('mihrab_lat');if(la){curLat=parseFloat(la);curLng=parseFloat(localStorage.getItem('mihrab_lng'));document.getElementById('gpsInfo').classList.remove('hidden');document.getElementById('coords').textContent=curLat.toFixed(5)+', '+curLng.toFixed(5);fetchP(curLat,curLng);updQibla();}else fetchP(curLat,curLng);renderAth('sabah');});
+
+async function fetchP(lat,lng){try{let ts=Math.floor(Date.now()/1000);let r=await fetch(`https://api.aladhan.com/v1/timings/${ts}?latitude=${lat}&longitude=${lng}&method=4`);let j=await r.json();prayers=j.data.timings;renderP();}catch{}}
+function renderP(){let order=[['الفجر','Fajr'],['الشروق','Sunrise'],['الظهر','Dhuhr'],['العصر','Asr'],['المغرب','Maghrib'],['العشاء','Isha']];let g=document.getElementById('prayerGrid');g.innerHTML='';let now=new Date(),nowM=now.getHours()*60+now.getMinutes(),next=null,nd=Infinity;order.forEach(([ar,en])=>{let t=prayers[en]||'--:--';let [h,m]=t.split(':').map(Number);if(isNaN(h))return;let mins=h*60+m,d=mins-nowM;if(d<0)d+=1440;if(d>0&&d<nd){nd=d;next={ar,t,en}};let isN=next&&next.ar===ar;let div=document.createElement('div');div.className=`rounded-2xl p-3 border ${isN?'bg-yellow-400 text-black border-yellow-400':'bg-[#0f2218] border-white/5'}`;div.innerHTML=`<p class="text-[11px] opacity-60 font-bold">${ar}</p><p class="font-black text-[18px]">${t}</p>${isN?'<p class="text-[9px] mt-1">القادمة</p>':''}`;div.onclick=()=>{if(isN)playAdhan();};g.appendChild(div);});if(next){document.getElementById('nextName').textContent=next.ar;document.getElementById('nextTime').textContent=next.t;let int=setInterval(()=>{let n=new Date(),cur=n.getHours()*3600+n.getMinutes()*60+n.getSeconds(),[nh,nm]=next.t.split(':').map(Number),tar=nh*3600+nm*60,d=tar-cur;if(d<0)d+=86400;let hh=Math.floor(d/3600),mm=Math.floor((d%3600)/60),ss=d%60;document.getElementById('countdown').textContent=`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;if(d===0&&adhanEnabled)playAdhan();},1000);}}
+
+function playAdhan(){
+ let idx=document.getElementById('adhanVoice').value; audio.src=adhanSources[idx]; audio.volume=document.getElementById('volume').value/100; audio.play().then(()=>{if(navigator.vibrate)navigator.vibrate([200,100,200]);}).catch(()=>alert('اضغط تشغيل مرة أخرى - المتصفح يمنع التشغيل التلقائي'));
+}
+document.getElementById('playBtn').onclick=playAdhan;
+document.getElementById('stopBtn').onclick=()=>audio.pause();
+document.getElementById('testAdhanBtn').onclick=playAdhan;
+document.getElementById('volume').oninput=e=>{document.getElementById('volText').textContent=e.target.value+'%'; audio.volume=e.target.value/100;};
+document.getElementById('adhanVoice').onchange=e=>{audio.src=adhanSources[e.target.value];};
+document.getElementById('adhanToggle').onchange=e=>{adhanEnabled=e.target.checked; if(e.target.checked){Notification.requestPermission(); localStorage.setItem('adhan_enabled','1');}else localStorage.setItem('adhan_enabled','0');};
+document.getElementById('duaAfterBtn').onclick=()=>document.getElementById('duaModal').classList.remove('hidden');
+sel.onchange=()=>{let o=sel.selectedOptions[0];if(!o.dataset.lat)return;curLat=parseFloat(o.dataset.lat);curLng=parseFloat(o.dataset.lng);localStorage.setItem('mihrab_lat',curLat);localStorage.setItem('mihrab_lng',curLng);document.getElementById('gpsInfo').classList.remove('hidden');document.getElementById('cityName').textContent=o.textContent;fetchP(curLat,curLng);updQibla();};
+document.getElementById('tapBtn').onclick=()=>{tasbih++;if(navigator.vibrate)navigator.vibrate(20);document.getElementById('tCount').textContent=tasbih;if(tasbih>=33){if(navigator.vibrate)navigator.vibrate([100,50,100]);}};
+document.getElementById('resetBtn').onclick=()=>{tasbih=0;document.getElementById('tCount').textContent='0';};
+document.querySelectorAll('.zBtn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.zBtn').forEach(x=>x.className='zBtn bg-white/5 px-3 py-1 rounded-full text-[11px]');b.className='zBtn bg-emerald-900/40 border border-emerald-700/40 px-3 py-1 rounded-full text-[11px] font-bold';document.getElementById('tText').textContent=b.dataset.z;tasbih=0;document.getElementById('tCount').textContent='0';});
+function renderAth(type){let box=document.getElementById('athkarBox');box.innerHTML='';ATHKAR[type].forEach(t=>{let d=document.createElement('div');d.className='bg-black/20 rounded-xl p-3 text-[13px] leading-relaxed border border-white/5';d.innerHTML=`<p class="amiri">${t}</p><div class="flex justify-between items-center mt-2"><span class="text-[10px] opacity-40">اضغط للنسخ</span><button class="text-[10px] bg-white/10 px-2 py-1 rounded-full">📋 نسخ</button></div>`;d.onclick=()=>navigator.clipboard.writeText(t);box.appendChild(d);});}
+document.querySelectorAll('.athTab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.athTab').forEach(x=>x.className='athTab bg-white/10 px-3 py-1.5 rounded-full text-xs');b.className='athTab bg-yellow-400 text-black px-3 py-1.5 rounded-full text-xs font-black';renderAth(b.dataset.ath);});
+document.getElementById('compassBtn').onclick=()=>{
+ if('DeviceOrientationEvent' in window){
+  let fn=e=>{let h=e.webkitCompassHeading||(360-e.alpha);if(h)document.getElementById('compassRose').style.transform=`rotate(${-h}deg)`;};
+  if(typeof DeviceOrientationEvent.requestPermission==='function'){DeviceOrientationEvent.requestPermission().then(p=>{if(p==='granted')window.addEventListener('deviceorientation',fn);});}else window.addEventListener('deviceorientation',fn);
+ }
+};
+document.getElementById('playDuaBtn').onclick=()=>{
+ let u=new SpeechSynthesisUtterance('اللهم رب هذه الدعوة التامة والصلاة القائمة آت محمدا الوسيلة والفضيلة');u.lang='ar-DZ';u.rate=0.8;speechSynthesis.speak(u);
+};
+if(localStorage.getItem('adhan_enabled')==='1'){document.getElementById('adhanToggle').checked=true;adhanEnabled=true;}
+audio.src=adhanSources[0];
+</script>
+</body>
+</html>
