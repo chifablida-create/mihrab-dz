@@ -1,0 +1,24 @@
+{
+  "name": "Mihrab Dz - محراب - أوقات الصلاة GPS",
+  "short_name": "Mihrab Dz",
+  "description": "أدق تطبيق أذان و أوقات الصلاة في الجزائر - GPS حقيقي - 5 أصوات أذان - قبلة - سبحة - أذكار",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020a07",
+  "theme_color": "#020a07",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
