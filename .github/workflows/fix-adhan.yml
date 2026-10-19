@@ -1,0 +1,16 @@
+name: Fix Adhan
+on: push
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          if ! grep -q "adhan-fix.js" index.html; then
+            sed -i 's|</body>|<script src="./adhan-fix.js"></script></body>|' index.html
+            git config user.name "bot"
+            git config user.email "bot@bot.com"
+            git add index.html
+            git commit -m "auto fix adhan"
+            git push
+          fi
